@@ -1,0 +1,13 @@
+package net.interact.web;
+
+public class InforeurResult {
+	private int statusCode;
+	private String result;
+	
+	public InforeurResult(int statusCode, String result){
+		this.statusCode = statusCode;
+		this.result = result;
+	}
+	
+	
+}

@@ -1,0 +1,5 @@
+package net.interact.web;
+
+public class InforeurErrorResponse {
+
+}

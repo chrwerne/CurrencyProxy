@@ -1,0 +1,7 @@
+INDEX VERSION 1.3+C:\work\source\CurrencyProxy\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+91159509.index
+3237384165.index
+4236082355.index
+1113701622.index
+4287201227.index
+4060994837.index

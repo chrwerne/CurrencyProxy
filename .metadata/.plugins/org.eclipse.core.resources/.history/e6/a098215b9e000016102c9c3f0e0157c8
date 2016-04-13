@@ -1,0 +1,159 @@
+package net.interact.web;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+
+@WebServlet("/Currencies")
+public class Currencies extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
+	final Logger logger = LoggerFactory.getLogger(Currencies.class);
+
+
+	public Currencies() {
+		super();
+	}
+
+	public void init(ServletConfig config) throws ServletException {
+	}
+
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		try{
+			String language = request.getParameter("Language");
+			String year = request.getParameter("Year");
+			String month = request.getParameter("Month");
+			
+			logger.info("Currency proxy called on <"+(new Date())+"> <language:"+language+"> <year:"+year+"> <month:"+month+">");
+			
+			if(language == null || language.isEmpty() || year == null || year.isEmpty() || month == null || month.isEmpty()){
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			}else{
+				InforeurResult inforeurResult = callInforeur(language, year, month);
+				
+				if(inforeurResult.getStatusCode()==200){
+					List<Currency> currencies = deserialize(inforeurResult.getResult());
+					String csv = buildCsv(currencies);
+
+					response.setStatus(HttpServletResponse.SC_OK);
+					response.setCharacterEncoding("UTF-8");
+					response.setContentType("text/csv");
+					String filename = "attachment; filename=currencies_"+year+"_"+"month"+"_"+language+".csv";
+					response.setHeader("Content-Disposition", filename);
+
+					PrintWriter out = response.getWriter();
+					out.println(csv);	
+
+				}else{
+					response.setStatus(inforeurResult.getStatusCode());
+					//TODO: set message
+				}
+				
+				
+			}
+		
+		}catch(Exception ex){
+			ex.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		}
+		
+
+	}
+
+	private InforeurResult callInforeur(String language, String year, String month) {
+		InforeurResult result = new InforeurResult();
+		
+		try {
+			String urlString = "http://ec.europa.eu/budg/inforeuro/api/public/monthly-rates?year=##year##&month=##month##&lang=##lang##";
+			urlString.replace("#lang#", language);
+			urlString.replace("#year#", year);
+			urlString.replace("#month#", month);
+			
+			URL url = new URL(urlString);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json");
+
+			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream()), "UTF-8"));
+
+			result.setStatusCode(conn.getResponseCode());
+			
+			String output;
+			while ((output = br.readLine()) != null) {
+				if(output!=null){
+					result.setResult(output);
+				}
+			}
+			conn.disconnect();
+			
+			if (conn.getResponseCode() == 200) {
+				
+				
+			}else{
+				logger.info("Returncode from Inforeur <"+conn.getResponseCode()+">"); 
+			}
+
+		} catch (MalformedURLException e) {
+			logger.error("MalformedURLException when connecting to Inforeur", e);
+		} catch (IOException e) {
+			logger.error("IOException when connecting to Inforeur", e);
+		}
+
+		return result;
+	}
+	
+	private List<Currency> deserialize(String input){
+		Gson gson = new Gson();
+		Currency[] currencyArray = gson.fromJson(input, Currency[].class);
+		return Arrays.asList(currencyArray);
+	}
+	
+	private String deserializeError(String input){
+		Gson gson = new Gson();
+		logger.debug("InforeurErrorResponse: <"+input+">");
+		InforeurErrorResponse errorResponse = gson.fromJson(input, InforeurErrorResponse.class);
+		
+		return errorResponse.getMessage();
+	}
+	
+	
+	private String buildCsv(List<Currency> currencies){
+		StringBuilder sb = new StringBuilder();
+		
+		for(Currency c: currencies){
+			sb.append(
+					c.getComment()).append(";")
+					.append(c.getIsoA3Code()).append(";")
+					.append(c.getCountry()).append(";")
+					.append(c.getIsoA2Code()).append(";")
+					.append(c.getCurrency()).append(";")
+					.append(c.getIsoA3Code()).append(";")
+					.append(c.getValue()).append(";")
+					.append("\r\n");
+		}
+		
+		return sb.toString();
+	}
+
+}

@@ -1,0 +1,11 @@
+package net.interact.web;
+
+public class Currency {
+
+	String country;
+	String currency;
+	String isoA3Code;
+	String isoA2Code;
+	String value;
+	String comment;
+}

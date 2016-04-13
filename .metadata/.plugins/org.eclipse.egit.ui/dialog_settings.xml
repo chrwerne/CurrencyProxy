@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<list key="EGit.KnownHosts">
+		<item value="git.eclipse.org"/>
+		<item value="github.com"/>
+		<item value="bitbucket.org"/>
+	</list>
+	<list key="CommitDialog.authorValues">
+		<item value="chrwerne &lt;christoph.werner@interact-eu.net&gt;"/>
+	</list>
+	<list key="CommitDialog.committerValues">
+		<item value="chrwerne &lt;christoph.werner@interact-eu.net&gt;"/>
+	</list>
+	<section name="GitCommitMessageComponent">
+		<list key="C:\Users\wernerc\Documents\GitHub\CurrencyProxy\.git">
+			<item value="false"/>
+			<item value="chrwerne &lt;christoph.werner@interact-eu.net&gt;"/>
+			<item value="Initial Commit"/>
+			<item value="chrwerne &lt;christoph.werner@interact-eu.net&gt;"/>
+			<item value="658cc528bf4ed91a0c3929c23ef77d89f60f6ae2"/>
+		</list>
+		<list key="C:\Users\wernerc\git\CurrencyProxy\.git">
+			<item value="false"/>
+			<item value="chrwerne &lt;christoph.werner@interact-eu.net&gt;"/>
+			<item value="Initial commit"/>
+			<item value="chrwerne &lt;christoph.werner@interact-eu.net&gt;"/>
+			<item value="0000000000000000000000000000000000000000"/>
+		</list>
+	</section>
+	<section name="org.eclipse.egit.ui.internal.staging.StagingView">
+		<item value="273,726" key="STAGING_SASH_FORM_WEIGHT"/>
+		<item value="false" key="sortItemState"/>
+		<item value="500,500" key="HORIZONTAL_SASH_FORM_WEIGHT"/>
+	</section>
+</section>

@@ -1,0 +1,20 @@
+package net.interact.web;
+
+public class Currency {
+
+	private String country;
+	private String currency;
+	private String isoA3Code;
+	private String isoA2Code;
+	private String value;
+	private String comment;
+	
+	public Currency(String country, String currency, String isoA3Code, String isoA2Code, String value, String comment){
+		this.country = country;
+		this.currency = currency;
+		this.isoA3Code = isoA3Code;
+		this.isoA2Code = isoA2Code;
+		this.value = value;
+		this.comment = comment;
+	}
+}
