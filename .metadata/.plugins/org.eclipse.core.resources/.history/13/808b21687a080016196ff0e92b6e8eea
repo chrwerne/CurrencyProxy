@@ -59,7 +59,7 @@ public class Currencies extends HttpServlet {
 					response.setStatus(HttpServletResponse.SC_OK);
 					response.setCharacterEncoding("UTF-8");
 					response.setContentType("text/csv");
-					String filename = "attachment; filename=currencies_"+year+"_"+"month"+"_"+month+"_"+language+".csv";
+					String filename = "attachment; filename=currencies_"+year+"_"+"month"+"_"+language+".csv";
 					response.setHeader("Content-Disposition", filename);
 
 					PrintWriter out = response.getWriter();
